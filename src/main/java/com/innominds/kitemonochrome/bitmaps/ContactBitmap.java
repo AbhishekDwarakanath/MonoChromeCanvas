@@ -354,6 +354,26 @@ public class ContactBitmap {
             }
         }
     }
+    public Bitmap drawbitmapforDialing(List<String> dialer, double x, double y) {
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_4444);
+        Canvas canvas = new Canvas(bitmap);
+        Paint pBackground = new Paint();
+        pBackground.setColor(Color.BLACK);
+        canvas.drawRect(0, 0, width, height, pBackground);
+        Paint pText = new Paint();
+        Typeface tf = Typeface.createFromAsset(context.getAssets(), "5x8_lcd_hd44780u_a02.ttf");
+        pText.setTypeface(tf);
+        pText.setColor(Color.GREEN);
+        pText.setTextSize(height / (float) 6);
+       // if(screen == NewContactScreenNumber){
+            canvas.drawText("Number", (int) x/5, (int) y/ 2, pText);
+       // }
+        for (int i = 0; i < dialer.size(); i++) {
+            canvas.drawText(dialer.get(i), ((int) x * i + 1) / 3, (int) y, pText);
+        }
+            return getScaledBitmap(bitmap);
+    }
+
     public Bitmap drawbitmapforCalling(Contact contact, double x, double y) {
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_4444);
         Canvas canvas = new Canvas(bitmap);
