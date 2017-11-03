@@ -36,9 +36,12 @@ import com.innominds.kitemonochrome.Contacts.Contact;
 import com.innominds.kitemonochrome.Contacts.ContactFetcher;
 import com.innominds.kitemonochrome.Contacts.ContactHelper;
 import com.innominds.kitemonochrome.Contacts.ContactPhone;
+import com.innominds.kitemonochrome.Utils.Utils;
 import com.innominds.kitemonochrome.bitmaps.ContactBitmap;
+import com.innominds.kitemonochrome.bitmaps.MessageBitmap;
 import com.innominds.kitemonochrome.network.CustomPhoneStateListener;
 import com.innominds.kitemonochrome.onClickListner.ContactsonClickListner;
+import com.innominds.kitemonochrome.onClickListner.MessageonClickListner;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -58,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     int height = 48;
     boolean scale = true;
 
-    public static int HomeScreen = 0;
+   /* public static int HomeScreen = 0;
     public static int ContactScreenMenu = 1;
 
     public static int Messages = 2;
@@ -70,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static int NewContactScreenNumber = 8;
     public static int ContactsOptions = 9;
     public static int DeleteContactListScreen = 10;
-    public static int DeleteContactConfirmScreen = 11;
+    public static int DeleteContactConfirmScreen = 11;*/
     //int nexWidth = 1260;
     //int nexHeight = 720;
 
@@ -138,13 +141,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     List<String> contactnumber = new ArrayList<String>();
     private String[] contactsOptionsPtr;
+    private String [] messageOptionsPtr;
     //private String[] contactsOptions = new String[]{"Search","Add","Delete"};
     private Contact DeleteContact ;
 
     private int dialerindex = 0;
     private boolean capsLetters = false;
     ContactBitmap contactBitmap;
+    MessageBitmap messageBitmap;
     private ContactsonClickListner contactsonClickListner;
+    private MessageonClickListner messageonClickListner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -210,6 +216,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         //MonoChromeView monoChromeView = new MonoChromeView(this);
         contactBitmap = new ContactBitmap(this);
+        messageBitmap = new MessageBitmap(this);
         AltimageView = (ImageView) findViewById(R.id.mAltered);
         AltimageView.setImageBitmap(drawbitmapfornetworksignal(onSignalStrength, "Menu", (nexWidth / 2.52), (nexHeight / 1.02)));
         //AltimageView.setImageBitmap(drawBitmapHomeScreen("Menu", (nexWidth / 2.52), (nexHeight / 1.02)));
@@ -331,7 +338,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         pText.setTypeface(tf);
         pText.setColor(Color.GREEN);
         pText.setTextSize(nexHeight / (float) 6);
-        if(screen == NewContactScreenNumber){
+        if(screen == Utils.NewContactScreenNumber){
             canvas.drawText("Number", (int) x/5, (int) y/ 2, pText);
         }
         for (int i = 0; i < dialer.size(); i++) {
@@ -454,52 +461,58 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (view.getId()) {
             case R.id.homeBtn:
                 //dialer.clear();
-                if (screen != HomeScreen) {
+                if (screen != Utils.HomeScreen) {
                     //nexWidth = 1260;
                     //nexHeight = 720;
                     //AltimageView.setImageBitmap(drawbitmap("Menu", (nexWidth / 2.52), (nexHeight / 1.02)));
                     AltimageView.setImageBitmap(drawbitmapfornetworksignal(onSignalStrength, "Menu", (nexWidth / 2.52), (nexHeight / 1.02)));
                     //AltimageView.setImageBitmap(drawBitmapHomeScreen("Menu", (nexWidth / 2.52), (nexHeight / 1.02)));
-                    screen = HomeScreen;
+                    screen = Utils.HomeScreen;
                 }
                 break;
             case R.id.selectBtn:
                 //dialer.clear();
-                if (screen == ContactScreenMenu) {
-                    setOnClickListnerClass(contactsonClickListner);
-                    screen = ContactsOptions;
+                if (screen == Utils.ContactScreenMenu) {
+                    screen = Utils.ContactsOptions;
                     if(contactsOptionsPtr== null)
                     contactsOptionsPtr = new String[]{">","",""};
                     AltimageView.setImageBitmap(contactBitmap.drawbitmapforContactsOptions(contactBitmap.getContactOptions(contactBitmap.getContactsOptions()), contactsOptionsPtr, (nexWidth / 3.15), (nexHeight / 1.67)));
                     contactsonClickListner = new ContactsonClickListner(MainActivity.this,contactBitmap,contactsOptionsPtr,screen);
                     setOnClickListnerClass(contactsonClickListner);
+                }else if (screen == Utils.MessageSceenMenu) {
+                    screen = Utils.MessageOptionScreen;
+                    if(messageOptionsPtr== null)
+                        messageOptionsPtr = new String[]{">","",""};
+                    AltimageView.setImageBitmap(messageBitmap.drawbitmapforMessagesOptions(messageBitmap.getMessageOptions(messageBitmap.getMessageOptions()), messageOptionsPtr, (nexWidth / 3.15), (nexHeight / 1.67)));
+                    messageonClickListner = new MessageonClickListner(MainActivity.this,messageBitmap,messageOptionsPtr,screen);
+                    setOnClickListnerClass(messageonClickListner);
                 }
-                else if (screen == HomeScreen) {
+                else if (screen == Utils.HomeScreen) {
                     AltimageView.setImageBitmap(drawbitmap("CONTACTS", (nexWidth / 4.5), (nexHeight / 1.67)));
-                    screen = ContactScreenMenu;
+                    screen = Utils.ContactScreenMenu;
                     mLeftBtn.setVisibility(View.VISIBLE);
                     mRightBtn.setVisibility(View.VISIBLE);
                 }
                 break;
             case R.id.cancelbtn:
-                if(screen == ContactScreenMenu || screen == Messages){
-                    screen = HomeScreen;
+                if(screen == Utils.ContactScreenMenu || screen == Utils.MessageSceenMenu){
+                    screen = Utils.HomeScreen;
                     AltimageView.setImageBitmap(drawBitmapHomeScreen("Menu", (nexWidth / 2.52), (nexHeight / 1.02)));
                 }
                 break;
             case R.id.leftBtn:
                 //dialer.clear();
-                if (screen == Messages) {
+                if (screen == Utils.MessageSceenMenu) {
                     AltimageView.setImageBitmap(drawbitmap("CONTACTS", (nexWidth / 4.5), (nexHeight / 1.67)));
-                    screen = ContactScreenMenu;
+                    screen = Utils.ContactScreenMenu;
                 }
                 break;
             case R.id.rightBtn:
-                if (screen == HomeScreen) {
+                if (screen == Utils.HomeScreen) {
                     dialer.clear();
-                }else if (screen == ContactScreenMenu) {
+                }else if (screen == Utils.ContactScreenMenu) {
                     AltimageView.setImageBitmap(drawbitmap("MESSAGES", (nexWidth / 4.5), (nexHeight / 1.67)));
-                    screen = Messages;
+                    screen = Utils.MessageSceenMenu;
                 }
                 break;
             case R.id.btncall:
@@ -532,7 +545,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //screen = 3;
                 break;
             case R.id.btn2:
-               if (screen == HomeScreen || screen == NewContactScreenNumber) {
+               if (screen == Utils.HomeScreen || screen == Utils.NewContactScreenNumber) {
                     dialer.add(dialerindex,"2");
                     dialerindex++;
                     AltimageView.setImageBitmap(drawbitmapforDialing(dialer, (nexWidth / 4.5), (nexHeight / 1.67)));
@@ -540,7 +553,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
             case R.id.btn3:
-                 if (screen == HomeScreen || screen == NewContactScreenNumber) {
+                 if (screen == Utils.HomeScreen || screen == Utils.NewContactScreenNumber) {
                     dialer.add(dialerindex,"3");
                     dialerindex++;
                     AltimageView.setImageBitmap(drawbitmapforDialing(dialer, (nexWidth / 4.5), (nexHeight / 1.67)));
@@ -548,7 +561,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
             case R.id.btn4:
-                if (screen == HomeScreen || screen == NewContactScreenNumber) {
+                if (screen == Utils.HomeScreen || screen == Utils.NewContactScreenNumber) {
                     dialer.add(dialerindex,"4");
                     dialerindex++;
                     AltimageView.setImageBitmap(drawbitmapforDialing(dialer, (nexWidth / 4.5), (nexHeight / 1.67)));
@@ -557,7 +570,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 break;
             case R.id.btn5:
-                if (screen == HomeScreen || screen == NewContactScreenNumber) {
+                if (screen == Utils.HomeScreen || screen == Utils.NewContactScreenNumber) {
                     dialer.add(dialerindex,"5");
                     dialerindex++;
                     AltimageView.setImageBitmap(drawbitmapforDialing(dialer, (nexWidth / 4.5), (nexHeight / 1.67)));
@@ -566,7 +579,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 break;
             case R.id.btn6:
-                if (screen == HomeScreen || screen == NewContactScreenNumber) {
+                if (screen == Utils.HomeScreen || screen == Utils.NewContactScreenNumber) {
                     dialer.add(dialerindex,"6");
                     dialerindex++;
                     AltimageView.setImageBitmap(drawbitmapforDialing(dialer, (nexWidth / 4.5), (nexHeight / 1.67)));
@@ -575,7 +588,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 break;
             case R.id.btn7:
-               if (screen == HomeScreen || screen == NewContactScreenNumber) {
+               if (screen == Utils.HomeScreen || screen == Utils.NewContactScreenNumber) {
                     dialer.add(dialerindex,"7");
                     dialerindex++;
                     AltimageView.setImageBitmap(drawbitmapforDialing(dialer, (nexWidth / 4.5), (nexHeight / 1.67)));
@@ -584,7 +597,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 break;
             case R.id.btn8:
-                if (screen == HomeScreen || screen == NewContactScreenNumber) {
+                if (screen == Utils.HomeScreen || screen == Utils.NewContactScreenNumber) {
                     dialer.add(dialerindex,"8");
                     dialerindex++;
                     AltimageView.setImageBitmap(drawbitmapforDialing(dialer, (nexWidth / 4.5), (nexHeight / 1.67)));
@@ -593,7 +606,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 break;
             case R.id.btn9:
-               if (screen == HomeScreen || screen == NewContactScreenNumber) {
+               if (screen == Utils.HomeScreen || screen == Utils.NewContactScreenNumber) {
                     dialer.add(dialerindex,"9");
                     dialerindex++;
                     AltimageView.setImageBitmap(drawbitmapforDialing(dialer, (nexWidth / 4.5), (nexHeight / 1.67)));
@@ -602,7 +615,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 break;
             case R.id.btn0:
-                if (screen == HomeScreen || screen == NewContactScreenNumber) {
+                if (screen == Utils.HomeScreen || screen == Utils.NewContactScreenNumber) {
                     dialer.add(dialerindex,"0");
                     dialerindex++;
                     AltimageView.setImageBitmap(drawbitmapforDialing(dialer, (nexWidth / 4.5), (nexHeight / 1.67)));
@@ -611,7 +624,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 break;
             case R.id.btnstar:
-                if (screen == HomeScreen || screen == NewContactScreenNumber) {
+                if (screen == Utils.HomeScreen || screen == Utils.NewContactScreenNumber) {
                     dialer.add(dialerindex,"*");
                     dialerindex++;
                     AltimageView.setImageBitmap(drawbitmapforDialing(dialer, (nexWidth / 4.5), (nexHeight / 1.67)));
@@ -620,7 +633,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 break;
             case R.id.btnhash:
-                if (screen == HomeScreen || screen == NewContactScreenNumber) {
+                if (screen == Utils.HomeScreen || screen == Utils.NewContactScreenNumber) {
                     dialer.add(dialerindex,"#");
                     dialerindex++;
                     AltimageView.setImageBitmap(drawbitmapforDialing(dialer, (nexWidth / 4.5), (nexHeight / 1.67)));
@@ -648,7 +661,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             Log.i(LOG_TAG,
                     "onSignalStrengthsChanged: " + onSignalStrength);
-            if (screen == HomeScreen)
+            if (screen == Utils.HomeScreen)
                 AltimageView.setImageBitmap(drawbitmapfornetworksignal(onSignalStrength, "Menu", (nexWidth / 2.52), (nexHeight / 1.02)));
 
         }
@@ -677,7 +690,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             } else {
                 mBatteryLevel = 1;
             }
-            if (screen == HomeScreen)
+            if (screen == Utils.HomeScreen)
                 AltimageView.setImageBitmap(drawbitmapfornetworksignal(onSignalStrength, "Menu", (nexWidth / 2.52), (nexHeight / 1.02)));
         }
     };

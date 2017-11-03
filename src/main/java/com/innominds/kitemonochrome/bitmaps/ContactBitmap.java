@@ -32,6 +32,9 @@ public class ContactBitmap {
     Boolean contactsLoaded1 = false;
     int frmContact = 0;
     private int sizeofContact = 0;
+    private String[] contactsOptions = new String[]{"Search","Add","Delete"};
+    boolean LoadedContacts = false;
+    private final List<Contact> list = new LinkedList<Contact>();
 
     private String[] contactsOptionsPtr;
 
@@ -43,7 +46,6 @@ public class ContactBitmap {
         this.contactsOptions = contactsOptions;
     }
 
-    private String[] contactsOptions = new String[]{"Search","Add","Delete"};
 
     public void setContacts1(Contact[] contacts1) {
         Contacts1 = contacts1;
@@ -63,8 +65,6 @@ public class ContactBitmap {
         LoadedContacts = loadedContacts;
     }
 
-    boolean LoadedContacts = false;
-
     public List<Contact> getList() {
         return list;
     }
@@ -72,7 +72,6 @@ public class ContactBitmap {
     public void clearList(){
         list.clear();
     }
-    private final List<Contact> list = new LinkedList<Contact>();
 
     public Boolean getContactsLoaded1() {
         return contactsLoaded1;
@@ -82,8 +81,6 @@ public class ContactBitmap {
         this.contactsLoaded1 = contactsLoaded1;
     }
 
-
-
     public int getFromContact() {
         return frmContact;
     }
@@ -91,7 +88,6 @@ public class ContactBitmap {
     public void setFromContact(int frmContact) {
         this.frmContact = frmContact;
     }
-
 
     public ContactBitmap(Context c) {
         context = c;

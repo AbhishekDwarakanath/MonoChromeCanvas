@@ -8,6 +8,7 @@ import com.innominds.kitemonochrome.Contacts.Contact;
 import com.innominds.kitemonochrome.Contacts.ContactFetcher;
 import com.innominds.kitemonochrome.MainActivity;
 import com.innominds.kitemonochrome.R;
+import com.innominds.kitemonochrome.Utils.Utils;
 import com.innominds.kitemonochrome.bitmaps.ContactBitmap;
 
 import java.util.ArrayList;
@@ -21,20 +22,9 @@ import java.util.Map;
  */
 public class ContactsonClickListner implements View.OnClickListener {
 
-    public static int HomeScreen = 0;
-    public static int ContactScreenMenu = 1;
-    public static int Messages = 2;
-    public static int dialerScreen = 3;
-    public static int ContactsList = 4;
-    public static int CallingScreen = 5;
-    public static int ContactDetailScreen = 6;
-    public static int NewContactScreenName = 7;
-    public static int NewContactScreenNumber = 8;
-    public static int ContactsOptions = 9;
-    public static int DeleteContactListScreen = 10;
+
     int screen = 0;
     Context context;
-    public static int DeleteContactConfirmScreen = 11;
     ContactBitmap contactBitmap;
     String[] Contactsptr;
     String[] Contacts = new String[6];
@@ -78,7 +68,7 @@ public class ContactsonClickListner implements View.OnClickListener {
     @Override
     public void onClick(View view) {
 
-        if (screen == NewContactScreenName) {
+        if (screen == Utils.NewContactScreenName) {
             if (contactname != null) {
                 for (int i = 0; i < contactname.size(); i++) {
                     Log.d("name", "" + contactname.get(i));
@@ -100,12 +90,12 @@ public class ContactsonClickListner implements View.OnClickListener {
 
                 break;
             case R.id.selectBtn:
-                if (screen == ContactsOptions) {
+                if (screen == Utils.ContactsOptions) {
                     for (int i = 0; i < contactBitmap.getContactsOptions().length; i++) {
                         if (!contactBitmap.getContactsOptions()[i].equalsIgnoreCase("")) {
                             if (contactBitmap.getContactsOptions()[i].charAt(0) == '>') {
                                 if(contactBitmap.getContactsOptions()[i].equalsIgnoreCase(">Search")){
-                                    screen = ContactsList;
+                                    screen = Utils.ContactsList;
                                     contactBitmap.loadContactsMap();
                                     //loadContactsMap(new String[]{"Abhi", "Innominds", "Innominds Office", "Ambulance", "Care", "Police", "Hospital", "Hostel", "Hotel", "Shop", "House", "Office"});
                                     Contactsptr = new String[]{">", "", "", "", "", ""};
@@ -115,12 +105,12 @@ public class ContactsonClickListner implements View.OnClickListener {
                                     contactname.clear();
                                     samekey =0;
                                     contactnameindex =0;
-                                    screen = NewContactScreenName;
+                                    screen = Utils.NewContactScreenName;
                                     act.setSelectButton("Next");
                                     act.setImageView(contactBitmap.drawbitmapforNewContact(contactname, (nexWidth / 4.5), (nexHeight / 1.67)));
                                 }else if(contactBitmap.getContactsOptions()[i].equalsIgnoreCase(">Delete")){
                                     act.setSelectButton("Delete");
-                                    screen = DeleteContactListScreen;
+                                    screen = Utils.DeleteContactListScreen;
                                     contactBitmap.loadContactsMap();
                                     //loadContactsMap(new String[]{"Abhi", "Innominds", "Innominds Office", "Ambulance", "Care", "Police", "Hospital", "Hostel", "Hotel", "Shop", "House", "Office"});
                                     Contactsptr = new String[]{">", "", "", "", "", ""};
@@ -131,28 +121,28 @@ public class ContactsonClickListner implements View.OnClickListener {
                         }
                     }
                     //act.setImageView(drawbitmapforContacts(contacts, (nexWidth / 3.15), (nexHeight / 1.67)));
-                } else if (screen == ContactsList) {
+                } else if (screen == Utils.ContactsList) {
                     for (int i = 0; i < contactBitmap.getContacts1().length; i++) {
                         String name = contactBitmap.getContacts1()[i].name;
                         if (!contactBitmap.getContacts1()[i].name.equalsIgnoreCase("")) {
                             if (contactBitmap.getContacts1()[i].name.charAt(0) == '>') {
                                 act.setImageView(contactBitmap.drawbitmapforContactDetail(contactBitmap.getContacts1()[i], (nexWidth / 2.5), (nexHeight / 1.67)));
-                                screen = ContactDetailScreen;
+                                screen = Utils.ContactDetailScreen;
                                 act.setSelectButton("Back");
                             }
                         }
                     }
-                } else if (screen == ContactDetailScreen) {
-                    screen = ContactsList;
+                } else if (screen == Utils.ContactDetailScreen) {
+                    screen = Utils.ContactsList;
                     //loadContactsMap(new String[]{"Abhi", "Innominds", "Innominds Office", "Ambulance", "Care", "Police", "Hospital", "Hostel", "Hotel", "Shop", "House", "Office"});
                     //Contactsptr = new String[]{">", "", "", "", "", ""};
                     act.setImageView(contactBitmap.drawbitmapforContactsscrollabl1e1(contactBitmap.getContacts(Contactsptr), Contactsptr, (nexWidth / 3.15), (nexHeight / 1.67)));
                     act.setSelectButton("Select");
-                }else if (screen == NewContactScreenName){
-                    screen = NewContactScreenNumber;
+                }else if (screen == Utils.NewContactScreenName){
+                    screen = Utils.NewContactScreenNumber;
                     act.setSelectButton("Save");
                     act.setImageView(contactBitmap.drawbitmapforDialing(dialer, (nexWidth / 4.5), (nexHeight / 1.67)));
-                }else if (screen == NewContactScreenNumber){
+                }else if (screen == Utils.NewContactScreenNumber){
                     new ContactFetcher(act).insertContact(act.getContentResolver(),
                             act.convertToString(contactname), act.convertToString(dialer));
                     dialer.clear();
@@ -160,7 +150,7 @@ public class ContactsonClickListner implements View.OnClickListener {
                     contactnameindex =0;
                     act.setSelectButton("Select");
                     samekey = 0;
-                    screen = ContactsList;
+                    screen = Utils.ContactsList;
                     contactBitmap.setLoadedContacts(false);
                     //LoadedContacts = false;
                     contactBitmap.loadContactsMap();
@@ -169,7 +159,7 @@ public class ContactsonClickListner implements View.OnClickListener {
                     //act.setImageView(drawbitmapforContactsscrollable(getContacts(), Contactsptr, (nexWidth / 3.15), (nexHeight / 1.67)));
                     act.setImageView(contactBitmap.drawbitmapforContactsscrollabl1e1(contactBitmap.getContacts(Contactsptr), Contactsptr, (nexWidth / 3.15), (nexHeight / 1.67)));
                     act.setSelectButton("Select");
-                }else if (screen == DeleteContactListScreen){
+                }else if (screen == Utils.DeleteContactListScreen){
                     for (int i = 0; i < contactBitmap.getContacts1().length; i++) {
                         if (!contactBitmap.getContacts1()[i].name.equalsIgnoreCase("")) {
                             if (contactBitmap.getContacts1()[i].name.charAt(0) == '>') {
@@ -185,16 +175,16 @@ public class ContactsonClickListner implements View.OnClickListener {
                                 //act.setImageView(drawbitmapforContactsscrollable(getContacts(), Contactsptr, (nexWidth / 3.15), (nexHeight / 1.67)));
                                 act.setImageView(drawbitmapforContactsscrollabl1e1(getContacts1(), Contactsptr, (nexWidth / 3.15), (nexHeight / 1.67)));
                                 */
-                                screen = DeleteContactConfirmScreen;
+                                screen = Utils.DeleteContactConfirmScreen;
                                 DeleteContact = contactBitmap.getContacts1()[i];
                                 act.setImageView(contactBitmap.drawbitmapforContactDelete(contactBitmap.getContacts1()[i], (nexWidth / 3.15), (nexHeight / 1.67)));
                             }
                         }
                     }
-                }else if(screen == DeleteContactConfirmScreen){
+                }else if(screen == Utils.DeleteContactConfirmScreen){
                     if(DeleteContact != null) {
                         act.setSelectButton("Delete");
-                        screen = DeleteContactListScreen;
+                        screen = Utils.DeleteContactListScreen;
                         String Number = DeleteContact.numbers.get(0).number.replace(" ", "");
 
                         new ContactFetcher(act).deleteContact(act.getContentResolver(), Number);
@@ -214,14 +204,14 @@ public class ContactsonClickListner implements View.OnClickListener {
                 }
                 break;
             case R.id.cancelbtn:
-                if (screen == ContactsList || screen == DeleteContactListScreen) {
-                    screen = ContactsOptions;
+                if (screen == Utils.ContactsList || screen == Utils.DeleteContactListScreen) {
+                    screen = Utils.ContactsOptions;
                     act.setSelectButton("Select");
                     contactsOptionsPtr = new String[]{">", "", ""};
                     act.setImageView(contactBitmap.drawbitmapforContactsOptions(contactBitmap.getContactOptions(contactBitmap.getContactsOptions()), contactsOptionsPtr, (nexWidth / 3.15), (nexHeight / 1.67)));
 
-                } else if (screen == DeleteContactConfirmScreen) {
-                    screen = DeleteContactListScreen;
+                } else if (screen == Utils.DeleteContactConfirmScreen) {
+                    screen = Utils.DeleteContactListScreen;
                     /*list.clear();
                     LoadedContacts = false;
                     contactsLoaded1 = false;
@@ -231,9 +221,9 @@ public class ContactsonClickListner implements View.OnClickListener {
                     //act.setImageView(drawbitmapforContactsscrollable(getContacts(), Contactsptr, (nexWidth / 3.15), (nexHeight / 1.67)));
                     act.setImageView(contactBitmap.drawbitmapforContactsscrollabl1e1(contactBitmap.getContacts(Contactsptr), Contactsptr, (nexWidth / 3.15), (nexHeight / 1.67)));
 
-                } else if(screen == ContactsOptions){
+                } else if(screen == Utils.ContactsOptions){
                     act.setOnClickListnerClass(act);
-                    screen = ContactScreenMenu;
+                    screen = Utils.ContactScreenMenu;
                     act.setScreen(screen);
                     act.setImageView(act.drawbitmap("CONTACTS", (nexWidth / 4.5), (nexHeight / 1.67)));
                     act.setButtonVisibility("left",true);
@@ -241,7 +231,7 @@ public class ContactsonClickListner implements View.OnClickListener {
                     /*mLeftBtn.setVisibility(View.VISIBLE);
                     mRightBtn.setVisibility(View.VISIBLE);
 */
-                }else if(screen == NewContactScreenName){
+                }else if(screen == Utils.NewContactScreenName){
                     if(contactnameindex > 0){
                         //contactname.get(contactnameindex).replace(contactname.get(contactnameindex),"");
                         contactname.set(contactnameindex,"");
@@ -251,12 +241,12 @@ public class ContactsonClickListner implements View.OnClickListener {
                         contactname.clear();
                         contactnameindex = 0;
                         samekey = 0;
-                        screen = ContactsOptions;
+                        screen = Utils.ContactsOptions;
                         act.setSelectButton("Select");
                         contactsOptionsPtr = new String[]{">", "", ""};
                         act.setImageView(contactBitmap.drawbitmapforContactsOptions(contactBitmap.getContactOptions(contactBitmap.getContactsOptions()), contactsOptionsPtr, (nexWidth / 3.15), (nexHeight / 1.67)));
                     }
-                }else if(screen == NewContactScreenNumber){
+                }else if(screen == Utils.NewContactScreenNumber){
                     if(dialerindex > 0) {
                         dialer.set(dialerindex-1, "");
                         act.setImageView(contactBitmap.drawbitmapforDialing(dialer, (nexWidth / 4.5), (nexHeight / 1.67)));
@@ -265,7 +255,7 @@ public class ContactsonClickListner implements View.OnClickListener {
                         dialer.clear();
                         dialerindex = 0;
                         //samekey = 0;
-                        screen = NewContactScreenName;
+                        screen = Utils.NewContactScreenName;
                         act.setSelectButton("Next");
                         act.setImageView(contactBitmap.drawbitmapforNewContact(contactname, (nexWidth / 4.5), (nexHeight/1.67 )));
                     }
@@ -273,17 +263,17 @@ public class ContactsonClickListner implements View.OnClickListener {
                 break;
             case R.id.leftBtn:
                 //dialer.clear();
-                if (screen == Messages) {
+                if (screen == Utils.MessageSceenMenu) {
                     act.setImageView(act.drawbitmap("CONTACTS", (nexWidth / 4.5), (nexHeight / 1.67)));
-                    screen = ContactScreenMenu;
-                } else if (screen == ContactsList ||screen == DeleteContactListScreen) {
+                    screen = Utils.ContactScreenMenu;
+                } else if (screen == Utils.ContactsList ||screen == Utils.DeleteContactListScreen) {
                     Contactsptr = contactBitmap.pointToPrevContact1(Contactsptr);
                     if (contactBitmap.getFromContact() >= 0) {
                         act.setImageView(contactBitmap.drawbitmapforContactsscrollabl1e1(contactBitmap.getContacts(Contactsptr), Contactsptr, (nexWidth / 3.15), (nexHeight / 1.67)));
                     } else {
                         contactBitmap.setFromContact(0);
                     }
-                }else if (screen == ContactsOptions) {
+                }else if (screen == Utils.ContactsOptions) {
                    /* Contactsptr = pointToPrevContact1(Contactsptr);
                     if (frmContact >= 0) {
                         act.setImageView(drawbitmapforContactsscrollabl1e1(getContacts1(), Contactsptr, (nexWidth / 3.15), (nexHeight / 1.67)));
@@ -293,19 +283,19 @@ public class ContactsonClickListner implements View.OnClickListener {
                 }
                 break;
             case R.id.rightBtn:
-                if (screen == NewContactScreenName) {
+                if (screen == Utils.NewContactScreenName) {
                     contactnameindex++;
                     contactname.add(contactnameindex, "");
                     count = 0;
-                } else if (screen == HomeScreen) {
+                } else if (screen == Utils.HomeScreen) {
                     dialer.clear();
-                }else if (screen == ContactScreenMenu) {
+                }else if (screen == Utils.ContactScreenMenu) {
                     act.setImageView(act.drawbitmap("MESSAGES", (nexWidth / 4.5), (nexHeight / 1.67)));
-                    screen = Messages;
-                }else if (screen == ContactsOptions) {
+                    screen = Utils.MessageSceenMenu;
+                }else if (screen == Utils.ContactsOptions) {
                     contactsOptionsPtr= contactBitmap.pointToNextOption(contactsOptionsPtr);
                     act.setImageView(contactBitmap.drawbitmapforContactsOptions(contactBitmap.getContactOptions(contactBitmap.getContactsOptions()), contactsOptionsPtr, (nexWidth / 3.15), (nexHeight / 1.67)));
-                }else if (screen == ContactsList || screen == DeleteContactListScreen) {
+                }else if (screen == Utils.ContactsList || screen == Utils.DeleteContactListScreen) {
                     /*Contactsptr = pointToNextContact(Contactsptr);
                     act.setImageView(drawbitmapforContactsscrollable(getContacts(), Contactsptr, (nexWidth / 3.15), (nexHeight / 1.67)));*/
                     Contactsptr = contactBitmap.pointToNextContact1(Contactsptr);
@@ -314,21 +304,21 @@ public class ContactsonClickListner implements View.OnClickListener {
                 break;
             case R.id.btncall:
                 contactBitmap.loadContactsMap();
-                if (screen == ContactsList) {
+                if (screen == Utils.ContactsList) {
                     for (int i = 0; i < contactBitmap.getContacts1().length; i++) {
                         if (!contactBitmap.getContacts1()[i].name.equalsIgnoreCase("")) {
                             if (contactBitmap.getContacts1()[i].name.charAt(0) == '>') {
                                 Contact contactcheck = contactBitmap.getContacts1()[i];
                                 String contactcheck1 = contactcheck.name.replace(">", "");
                                 act.setImageView(contactBitmap.drawbitmapforCalling(contactBitmap.getContacts1()[i], (nexWidth / 2.5), (nexHeight / 1.67)));
-                                screen = CallingScreen;
+                                screen = Utils.CallingScreen;
                                act.setCallButton("End Call");
                             }
                         }
                     }
                 }
-                else if (screen == CallingScreen) {
-                    screen = ContactsList;
+                else if (screen == Utils.CallingScreen) {
+                    screen = Utils.ContactsList;
                     //loadContactsMap(new String[]{"Abhi", "Innominds", "Innominds Office", "Ambulance", "Care", "Police", "Hospital", "Hostel", "Hotel", "Shop", "House", "Office"});
                     //Contactsptr = new String[]{">", "", "", "", "", ""};
                     act.setImageView(contactBitmap.drawbitmapforContactsscrollabl1e1(contactBitmap.getContacts(Contactsptr), Contactsptr, (nexWidth / 3.15), (nexHeight / 1.67)));
@@ -342,7 +332,7 @@ public class ContactsonClickListner implements View.OnClickListener {
                 //screen = 3;
                 break;
             case R.id.btn2:
-                if (screen == NewContactScreenName) {
+                if (screen == Utils.NewContactScreenName) {
                     switch (count) {
                         case 0:
                             contactname.set(contactnameindex, "a");
@@ -366,7 +356,7 @@ public class ContactsonClickListner implements View.OnClickListener {
                         //return;
                     }
                     act.setImageView(contactBitmap.drawbitmapforNewContact(contactname, (nexWidth / 4.5), (nexHeight/1.67 )));
-                } else if (screen == HomeScreen || screen == NewContactScreenNumber) {
+                } else if (screen == Utils.HomeScreen || screen == Utils.NewContactScreenNumber) {
                     dialer.add(dialerindex,"2");
                     dialerindex++;
                     act.setImageView(contactBitmap.drawbitmapforDialing(dialer, (nexWidth / 4.5), (nexHeight / 1.67)));
@@ -374,7 +364,7 @@ public class ContactsonClickListner implements View.OnClickListener {
                 }
                 break;
             case R.id.btn3:
-                if (screen == NewContactScreenName) {
+                if (screen == Utils.NewContactScreenName) {
                     switch (count) {
                         case 0:
                             contactname.set(contactnameindex, "c");
@@ -394,7 +384,7 @@ public class ContactsonClickListner implements View.OnClickListener {
                             break;
                     }
                     act.setImageView(contactBitmap.drawbitmapforNewContact(contactname, (nexWidth / 4.5), (nexHeight / 1.67)));
-                } else if (screen == HomeScreen || screen == NewContactScreenNumber) {
+                } else if (screen == Utils.HomeScreen || screen == Utils.NewContactScreenNumber) {
                     dialer.add(dialerindex,"3");
                     dialerindex++;
                     act.setImageView(contactBitmap.drawbitmapforDialing(dialer, (nexWidth / 4.5), (nexHeight / 1.67)));
@@ -402,7 +392,7 @@ public class ContactsonClickListner implements View.OnClickListener {
                 }
                 break;
             case R.id.btn4:
-                if (screen == NewContactScreenName) {
+                if (screen == Utils.NewContactScreenName) {
                     switch (count) {
                         case 0:
                             contactname.set(contactnameindex, "g");
@@ -423,7 +413,7 @@ public class ContactsonClickListner implements View.OnClickListener {
 
                     }
                     act.setImageView(contactBitmap.drawbitmapforNewContact(contactname, (nexWidth / 4.5), (nexHeight / 1.67)));
-                } else if (screen == HomeScreen || screen == NewContactScreenNumber) {
+                } else if (screen == Utils.HomeScreen || screen == Utils.NewContactScreenNumber) {
                     dialer.add(dialerindex,"4");
                     dialerindex++;
                     act.setImageView(contactBitmap.drawbitmapforDialing(dialer, (nexWidth / 4.5), (nexHeight / 1.67)));
@@ -432,7 +422,7 @@ public class ContactsonClickListner implements View.OnClickListener {
 
                 break;
             case R.id.btn5:
-                if (screen == NewContactScreenName) {
+                if (screen == Utils.NewContactScreenName) {
                     switch (count) {
                         case 0:
                             contactname.set(contactnameindex, "j");
@@ -452,7 +442,7 @@ public class ContactsonClickListner implements View.OnClickListener {
                             break;
                     }
                     act.setImageView(contactBitmap.drawbitmapforNewContact(contactname, (nexWidth / 4.5), (nexHeight / 1.67)));
-                } else if (screen == HomeScreen || screen == NewContactScreenNumber) {
+                } else if (screen == Utils.HomeScreen || screen == Utils.NewContactScreenNumber) {
                     dialer.add(dialerindex,"5");
                     dialerindex++;
                     act.setImageView(contactBitmap.drawbitmapforDialing(dialer, (nexWidth / 4.5), (nexHeight / 1.67)));
@@ -461,7 +451,7 @@ public class ContactsonClickListner implements View.OnClickListener {
 
                 break;
             case R.id.btn6:
-                if (screen == NewContactScreenName) {
+                if (screen == Utils.NewContactScreenName) {
                     switch (count) {
                         case 0:
                             contactname.set(contactnameindex, "m");
@@ -481,7 +471,7 @@ public class ContactsonClickListner implements View.OnClickListener {
                             break;
                     }
                     act.setImageView(contactBitmap.drawbitmapforNewContact(contactname, (nexWidth / 4.5), (nexHeight / 1.67)));
-                } else if (screen == HomeScreen || screen == NewContactScreenNumber) {
+                } else if (screen == Utils.HomeScreen || screen == Utils.NewContactScreenNumber) {
                     dialer.add(dialerindex,"6");
                     dialerindex++;
                     act.setImageView(contactBitmap.drawbitmapforDialing(dialer, (nexWidth / 4.5), (nexHeight / 1.67)));
@@ -490,7 +480,7 @@ public class ContactsonClickListner implements View.OnClickListener {
 
                 break;
             case R.id.btn7:
-                if (screen == NewContactScreenName) {
+                if (screen == Utils.NewContactScreenName) {
                     switch (count) {
                         case 0:
                             contactname.set(contactnameindex, "p");
@@ -514,7 +504,7 @@ public class ContactsonClickListner implements View.OnClickListener {
                             break;
                     }
                     act.setImageView(contactBitmap.drawbitmapforNewContact(contactname, (nexWidth / 4.5), (nexHeight / 1.67)));
-                } else if (screen == HomeScreen || screen == NewContactScreenNumber) {
+                } else if (screen == Utils.HomeScreen || screen == Utils.NewContactScreenNumber) {
                     dialer.add(dialerindex,"7");
                     dialerindex++;
                     act.setImageView(contactBitmap.drawbitmapforDialing(dialer, (nexWidth / 4.5), (nexHeight / 1.67)));
@@ -523,7 +513,7 @@ public class ContactsonClickListner implements View.OnClickListener {
 
                 break;
             case R.id.btn8:
-                if (screen == NewContactScreenName) {
+                if (screen == Utils.NewContactScreenName) {
                     switch (count) {
                         case 0:
                             contactname.set(contactnameindex, "t");
@@ -543,7 +533,7 @@ public class ContactsonClickListner implements View.OnClickListener {
                             break;
                     }
                     act.setImageView(contactBitmap.drawbitmapforNewContact(contactname, (nexWidth / 4.5), (nexHeight / 1.67)));
-                } else if (screen == HomeScreen || screen == NewContactScreenNumber) {
+                } else if (screen == Utils.HomeScreen || screen == Utils.NewContactScreenNumber) {
                     dialer.add(dialerindex,"8");
                     dialerindex++;
                     act.setImageView(contactBitmap.drawbitmapforDialing(dialer, (nexWidth / 4.5), (nexHeight / 1.67)));
@@ -552,7 +542,7 @@ public class ContactsonClickListner implements View.OnClickListener {
 
                 break;
             case R.id.btn9:
-                if (screen == NewContactScreenName) {
+                if (screen == Utils.NewContactScreenName) {
                     switch (count) {
                         case 0:
                             contactname.set(contactnameindex, "w");
@@ -576,7 +566,7 @@ public class ContactsonClickListner implements View.OnClickListener {
                             break;
                     }
                     act.setImageView(contactBitmap.drawbitmapforNewContact(contactname, (nexWidth / 4.5), (nexHeight / 1.67)));
-                } else if (screen == HomeScreen || screen == NewContactScreenNumber) {
+                } else if (screen == Utils.HomeScreen || screen == Utils.NewContactScreenNumber) {
                     dialer.add(dialerindex,"9");
                     dialerindex++;
                     act.setImageView(contactBitmap.drawbitmapforDialing(dialer, (nexWidth / 4.5), (nexHeight / 1.67)));
@@ -585,7 +575,7 @@ public class ContactsonClickListner implements View.OnClickListener {
 
                 break;
             case R.id.btn0:
-                if (screen == NewContactScreenName) {
+                if (screen == Utils.NewContactScreenName) {
                     switch (count) {
                         case 0:
                             contactname.set(contactnameindex, "0");
@@ -597,7 +587,7 @@ public class ContactsonClickListner implements View.OnClickListener {
                             break;
                     }
                     act.setImageView(contactBitmap.drawbitmapforNewContact(contactname, (nexWidth / 4.5), (nexHeight / 1.67)));
-                } else if (screen == HomeScreen || screen == NewContactScreenNumber) {
+                } else if (screen == Utils.HomeScreen || screen == Utils.NewContactScreenNumber) {
                     dialer.add(dialerindex,"0");
                     dialerindex++;
                     act.setImageView(contactBitmap.drawbitmapforDialing(dialer, (nexWidth / 4.5), (nexHeight / 1.67)));
@@ -606,7 +596,7 @@ public class ContactsonClickListner implements View.OnClickListener {
 
                 break;
             case R.id.btnstar:
-                if (screen == NewContactScreenName) {
+                if (screen == Utils.NewContactScreenName) {
                     switch (count) {
                         case 0:
                             contactname.set(contactnameindex, "*");
@@ -614,7 +604,7 @@ public class ContactsonClickListner implements View.OnClickListener {
                             break;
                     }
                     act.setImageView(contactBitmap.drawbitmapforNewContact(contactname, (nexWidth / 4.5), (nexHeight / 1.67)));
-                } else if (screen == HomeScreen || screen == NewContactScreenNumber) {
+                } else if (screen == Utils.HomeScreen || screen == Utils.NewContactScreenNumber) {
                     dialer.add(dialerindex,"*");
                     dialerindex++;
                     act.setImageView(contactBitmap.drawbitmapforDialing(dialer, (nexWidth / 4.5), (nexHeight / 1.67)));
@@ -623,7 +613,7 @@ public class ContactsonClickListner implements View.OnClickListener {
 
                 break;
             case R.id.btnhash:
-                if (screen == NewContactScreenName) {
+                if (screen == Utils.NewContactScreenName) {
                     switch (count) {
                         case 0:
                             contactname.set(contactnameindex, "#");
@@ -634,7 +624,7 @@ public class ContactsonClickListner implements View.OnClickListener {
                             break;
                     }
                     act.setImageView(contactBitmap.drawbitmapforNewContact(contactname, (nexWidth / 4.5), (nexHeight)));
-                } else if (screen == HomeScreen || screen == NewContactScreenNumber) {
+                } else if (screen == Utils.HomeScreen || screen == Utils.NewContactScreenNumber) {
                     dialer.add(dialerindex,"#");
                     dialerindex++;
                     act.setImageView(contactBitmap.drawbitmapforDialing(dialer, (nexWidth / 4.5), (nexHeight / 1.67)));
